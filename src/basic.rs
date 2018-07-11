@@ -1,7 +1,7 @@
 //! Basic Latin. `U+0000` - `U+007F`
 use super::{FontUtf16, Utf16Fonts, legacy::BASIC_LEGACY};
 
-use std::fmt;
+use core::fmt;
 
 /// A constant `[FontUtf16; 128]`, for Basic Latin fonts (`U+0000` - `U+007F`).
 ///
@@ -1437,44 +1437,6 @@ impl Utf16Fonts for BasicFonts {
             Ok(idx) => Some(self.0[idx]),
             _ => None,
         }
-    }
-
-    fn print_set(&self) {
-        println!();
-        println!("# `{:?}`", self);
-        for (idx, font) in self.0.iter().enumerate() {
-            if font.is_whitespace() {
-                println!("## {:3?}: 0x{:04X} \" \"", idx, font.utf16());
-                continue;
-            }
-            println!(
-                "## `{:?}[{:?}]`: `U+{:04X}` `{:?}`",
-                self,
-                idx,
-                font.utf16(),
-                font.to_string()
-            );
-            println!();
-            println!("```text");
-            for x in &font.byte_array() {
-                for bit in 0..8 {
-                    match *x & 1 << bit {
-                        0 => print!("░"),
-                        _ => print!("█"),
-                    }
-                }
-                println!();
-            }
-            println!("```");
-            println!();
-        }
-    }
-
-    fn to_vec(&self) -> Vec<(u16, FontUtf16)> {
-        self.0.into_iter().fold(Vec::with_capacity(128), |mut v, font| {
-            v.push((font.utf16(), *font));
-            v
-        })
     }
 }
 

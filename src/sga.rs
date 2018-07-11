@@ -1,6 +1,6 @@
 //! Special characters with private unicode points.
 use super::{legacy::SGA_LEGACY, utf16::{FontUtf16, Utf16Fonts}};
-use std::fmt;
+use core::fmt;
 
 /// A constant `[FontUtf16; 26]`, for special SGA fonts (`U+E543` - `U+E55A`).
 ///
@@ -417,46 +417,6 @@ impl Utf16Fonts for SgaFonts {
             _ => None,
         }
     }
-
-    fn print_set(&self) {
-        println!();
-        println!("# `{:?}`", self);
-        for (idx, font) in self.0.iter().enumerate() {
-            print_set(idx, &font);
-        }
-    }
-
-    fn to_vec(&self) -> Vec<(u16, FontUtf16)> {
-        self.0.into_iter().fold(Vec::with_capacity(128), |mut v, font| {
-            v.push((font.utf16(), *font));
-            v
-        })
-    }
-}
-fn print_set(idx: usize, font: &FontUtf16) {
-    if font.is_whitespace() {
-        println!("## {:3?}: 0x{:04X} \" \"", idx, font.utf16());
-        return;
-    }
-    println!(
-        "## `[{:?}]`: `0x{:04X}` `{:?}`",
-        idx,
-        font.utf16(),
-        font.to_string()
-    );
-    println!();
-    println!("```text");
-    for x in &font.byte_array() {
-        for bit in 0..8 {
-            match *x & 1 << bit {
-                0 => print!("░"),
-                _ => print!("█"),
-            }
-        }
-        println!();
-    }
-    println!("```");
-    println!();
 }
 
 #[cfg(test)]

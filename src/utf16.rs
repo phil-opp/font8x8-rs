@@ -8,7 +8,6 @@ pub use super::hiragana::{HIRAGANA_UTF16, HiraganaFonts};
 pub use super::latin::{LATIN_UTF16, LatinFonts};
 pub use super::misc::{MISC_UTF16, MiscFonts};
 pub use super::sga::{SGA_UTF16, SgaFonts};
-pub use std::string::FromUtf16Error;
 
 /// A single 8x8 font which supports `UTF-16` encoding/decoding.
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -22,10 +21,6 @@ impl FontUtf16 {
     /// Return the `[u8; 8]`-representation for this font.
     pub fn byte_array(&self) -> [u8; 8] {
         self.1
-    }
-    /// Return a result with the corresponding `String` for the font.
-    pub fn to_string(&self) -> String {
-        String::from_utf16(&[self.0]).unwrap()
     }
 
     /// Returns a `bool` indicating whether this font renders as a whitespace (all `0`).
@@ -62,8 +57,6 @@ impl Into<(u16, [u8; 8])> for FontUtf16 {
 pub trait Utf16Fonts {
     fn get(&self, key: u16) -> Option<[u8; 8]>;
     fn get_font(&self, key: u16) -> Option<FontUtf16>;
-    fn print_set(&self);
-    fn to_vec(&self) -> Vec<(u16, FontUtf16)>;
 }
 
 #[cfg(test)]
